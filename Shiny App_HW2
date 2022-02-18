@@ -1,0 +1,15 @@
+library(shiny)
+Iris2 = iris[-5]
+ui <- fluidPage(
+  titlePanel("Distribution of Iris Characteristics"),
+  selectInput("var", "Variable", names(Iris2)),
+  numericInput("bins", "bins", 10, min = 1),
+  plotOutput("hist")
+)
+server <- function(input, output, session) {
+  data <- reactive(Iris2[[input$var]])
+  output$hist <- renderPlot({
+    hist(data(), breaks = input$bins, main = input$var,col="orange")
+  }, res = 96)
+}
+shinyApp(ui = ui, server = server)
